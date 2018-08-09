@@ -51,6 +51,13 @@ bool EthernetServerSocket_isConnected (uint8_t number,
 EthernetSocket_Error EthernetServerSocket_disconnect (uint8_t number);
 
 /**
+ * This funcion close the selected client at the selected server socket
+ * @param number The number of server
+ * @param client The number of client
+ */
+EthernetSocket_Error EthernetServerSocket_disconnectClient (uint8_t number, uint8_t client);
+
+/**
  *
  * @param[in] number
  * @param[in] client

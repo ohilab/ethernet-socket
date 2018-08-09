@@ -329,9 +329,34 @@ EthernetSocket_Error EthernetServerSocket_disconnect (uint8_t number)
     if (error == ERR_OK)
     {
         dev->status = ETHERNETSOCKET_STATUS_DISCONNECTED;
+        dev->connectedClients = 0;
         return ETHERNETSOCKET_ERROR_OK;
     }
     return ETHERNETSOCKET_ERROR_DISCONNECTION_FAIL;
+}
+
+EthernetSocket_Error EthernetServerSocket_disconnectClient (uint8_t number, uint8_t client)
+{
+    EthernetServerSocket_Device *dev = &EthernetServerSocket_socket[number];
+
+    uint8_t tmpClient = (number * ETHERNET_MAX_LISTEN_CLIENT) + client;
+    if (EthernetServerSocket_listenClients[tmpClient].status ==
+        ETHERNETSOCKET_STATUS_CONNECTED)
+    {
+        // Close the connection with the client
+        struct tcp_pcb * pcb = EthernetServerSocket_listenClients[tmpClient].clientpcb;
+        tcp_arg(pcb,NULL);
+        tcp_sent(pcb,NULL);
+        tcp_recv(pcb,NULL);
+
+        err_t error = tcp_close(pcb);
+        if (error == ERR_OK)
+        {
+            EthernetServerSocket_listenClients[tmpClient].status =
+                    ETHERNETSOCKET_STATUS_DISCONNECTED;
+            dev->connectedClients--;
+        }
+    }
 }
 
 int16_t EthernetServerSocket_available (uint8_t number, uint8_t client)
