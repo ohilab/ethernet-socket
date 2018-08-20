@@ -117,11 +117,8 @@ void EthernetServerSocket_errorHandle (void *arg,
                                       err_t err)
 {
     EthernetServerSocket_Client *dev = (EthernetServerSocket_Client *)arg;
-    dev->server->status = ETHERNETSOCKET_STATUS_ERROR; // FIXME
-    // Decrease number of connected clients
-    dev->server->connectedClients--;
-    // Change connection status of client
-    dev->status = ETHERNETSOCKET_STATUS_DISCONNECTED;
+    dev->server->status = ETHERNETSOCKET_STATUS_ERROR;
+    // FIXME
     // Save error type!
     dev->tcpError = err;
 
@@ -348,6 +345,7 @@ EthernetSocket_Error EthernetServerSocket_disconnectClient (uint8_t number, uint
         tcp_arg(pcb,NULL);
         tcp_sent(pcb,NULL);
         tcp_recv(pcb,NULL);
+        tcp_err(pcb,NULL);
 
         err_t error = tcp_close(pcb);
         if (error == ERR_OK)
@@ -359,15 +357,19 @@ EthernetSocket_Error EthernetServerSocket_disconnectClient (uint8_t number, uint
     }
 }
 
-int16_t EthernetServerSocket_available (uint8_t number, uint8_t client)
+EthernetSocket_Error EthernetServerSocket_available (uint8_t number,
+                                                     uint8_t client,
+                                                     int16_t* available)
 {
     if (EthernetServerSocket_isConnected(number,client) == FALSE)
-        return -1;
+        return ETHERNETSOCKET_ERROR_NOT_CONNECTED;
 
     uint8_t tmpClient = (number * ETHERNET_MAX_LISTEN_CLIENT) + client;
 
-    return (EthernetServerSocket_listenClients[tmpClient].rxBufferTail -
+    *available = (EthernetServerSocket_listenClients[tmpClient].rxBufferTail -
             EthernetServerSocket_listenClients[tmpClient].rxBufferHead);
+
+    return ETHERNETSOCKET_ERROR_OK;
 }
 
 EthernetSocket_Error EthernetServerSocket_read (uint8_t number,

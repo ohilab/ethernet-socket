@@ -61,10 +61,14 @@ EthernetSocket_Error EthernetServerSocket_disconnectClient (uint8_t number, uint
  *
  * @param[in] number
  * @param[in] client
- * @return The number of byte in the receive buffer of the selected connection,
- * -1 in case of any problems.
+ * @param[out] available The number of byte in the receive buffer of the
+ * selected connection,
+ * @return ETHERNETSOCKET_ERROR_NOT_CONNECTED if the client is not connected
+ * ETHERNETSOCKET_ERROR_OK otherwise.
  */
-int16_t EthernetServerSocket_available (uint8_t number, uint8_t client);
+EthernetSocket_Error EthernetServerSocket_available (uint8_t number,
+                                                     uint8_t client,
+                                                     int16_t* available);
 
 /**
  *
