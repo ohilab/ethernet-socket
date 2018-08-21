@@ -1,10 +1,11 @@
-/*******************************************************************************
+/*
  * Ethernet Client/Server Socket with libohiboard
  * Copyright (C) 2017-2018 A. C. Open Hardware Ideas Lab
  *
  * Authors:
  *  Marco Giammarini <m.giammarini@warcomeb.it>
  *  Matteo Civale
+ *  Gianluca Calignano <g.calignano97@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +24,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- ******************************************************************************/
+*/
 
 #include "ethernet-serversocket.h"
 
@@ -76,7 +77,7 @@ err_t EthernetServerSocket_receiveHandle (void *arg,
     uint8_t* payload;
     EthernetServerSocket_Client *dev = (EthernetServerSocket_Client *)arg;
 
-    if((err == ERR_OK) && (p != NULL))
+    if ((err == ERR_OK) && (p != NULL))
     {
         // Get buffer dimension
         plen = p->len;
@@ -363,6 +364,7 @@ EthernetSocket_Error EthernetServerSocket_disconnectClient (uint8_t number, uint
             dev->connectedClients--;
         }
     }
+    return ETHERNETSOCKET_ERROR_OK;
 }
 
 EthernetSocket_Error EthernetServerSocket_available (uint8_t number,
