@@ -218,7 +218,7 @@ EthernetSocket_Error EthernetServerSocket_connect (uint8_t number,
 
     // Check if the socket exist
     if (number >= ETHERNET_MAX_SOCKET_SERVER)
-        return ETHERNETSOCKET_ERROR_WRONG_NUMBER;
+        return ETHERNETSOCKET_ERROR_WRONG_SOCKET_NUMBER;
 
     // Check if the socket is just in use!
     if (EthernetServerSocket_socket[number].status == ETHERNETSOCKET_STATUS_CONNECTED)
@@ -263,11 +263,11 @@ bool EthernetServerSocket_isConnected (uint8_t number,
 {
     // Check if the socket exist
     if (number >= ETHERNET_MAX_SOCKET_SERVER)
-        return FALSE;
+        return ETHERNETSOCKET_ERROR_WRONG_SOCKET_NUMBER;
 
-    // Check if the socket exist
+    // Check if the client exist
     if (client >= ETHERNET_MAX_LISTEN_CLIENT)
-        return FALSE;
+        return ETHERNETSOCKET_ERROR_WRONG_CLIENT_NUMBER;
 
     // Check if the socket is connected!
     if (EthernetServerSocket_socket[number].status != ETHERNETSOCKET_STATUS_CONNECTED)
@@ -285,7 +285,7 @@ EthernetSocket_Error EthernetServerSocket_disconnect (uint8_t number)
 {
     // Check if the socket exist
     if (number >= ETHERNET_MAX_SOCKET_CLIENT)
-        return ETHERNETSOCKET_ERROR_WRONG_NUMBER;
+        return ETHERNETSOCKET_ERROR_WRONG_SOCKET_NUMBER;
 
     // Check if the socket is connected!
     if (EthernetServerSocket_socket[number].status != ETHERNETSOCKET_STATUS_CONNECTED)
@@ -334,6 +334,14 @@ EthernetSocket_Error EthernetServerSocket_disconnect (uint8_t number)
 
 EthernetSocket_Error EthernetServerSocket_disconnectClient (uint8_t number, uint8_t client)
 {
+    // Check if the socket exist
+    if (number >= ETHERNET_MAX_SOCKET_SERVER)
+        return ETHERNETSOCKET_ERROR_WRONG_SOCKET_NUMBER;
+
+    // Check if the client exist
+    if (client >= ETHERNET_MAX_LISTEN_CLIENT)
+        return ETHERNETSOCKET_ERROR_WRONG_CLIENT_NUMBER;
+
     EthernetServerSocket_Device *dev = &EthernetServerSocket_socket[number];
 
     uint8_t tmpClient = (number * ETHERNET_MAX_LISTEN_CLIENT) + client;
@@ -404,7 +412,7 @@ EthernetSocket_Error EthernetServerSocket_clients (uint8_t number, uint8_t* clie
 
     // Check if the socket exist
     if (number >= ETHERNET_MAX_SOCKET_SERVER)
-        return ETHERNETSOCKET_ERROR_WRONG_NUMBER;
+        return ETHERNETSOCKET_ERROR_WRONG_SOCKET_NUMBER;
 
     // Check if the socket is just in use!
     if (EthernetServerSocket_socket[number].status != ETHERNETSOCKET_STATUS_CONNECTED)
