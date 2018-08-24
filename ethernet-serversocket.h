@@ -26,42 +26,10 @@
  * THE SOFTWARE.
  */
 
-/**
- * @mainpage Ethernet/ServerSocket library with @a libohiboard
- *
- * This project...
- *
- * @section changelog ChangeLog
- *
- * @li v1.0 of 2018/08/XX - First release
- *
- * @section library External Library
- *
- * The library use the following external library
- * @li libohiboard https://github.com/ohilab/libohiboard a C framework for
- * NXP Kinetis microcontroller
- *
- * @section thanksto Thanks to...
- * @li Marco Giammarini
- * @li Matteo Civale
- * @li Gianluca Calignano
- */
-
 #ifndef __OHILAB_ETHERNET_SERVERSOCKET_H
 #define __OHILAB_ETHERNET_SERVERSOCKET_H
 
 #include "ethernet-socket.h"
-
-/**
- * @defgroup functions Ethernet server socket functions
- * The HTTP server function group
- *
- * @defgroup macros Ethernet server socket macros
- * @ingroup functions
- * Macros MUST be defined to enable the library to work properly.
- * They could be defined in board.h but there is a check in http-server.h which
- * avoid silly problems if macros are not defined.
- */
 
 /**
  * @ingroup functions
